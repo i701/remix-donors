@@ -1,5 +1,4 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction } from "@remix-run/node"
 import {
   Links,
   LiveReload,
@@ -7,13 +6,23 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "@remix-run/react";
+} from "@remix-run/react"
+import stylesheet from "~/tailwind.css"
+import type { PropsWithChildren } from "react"
+import ComplexNavbar from "./components/Navbar"
 
 export const links: LinksFunction = () => [
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-];
+  { rel: "stylesheet", href: stylesheet },
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap",
+  },
+]
 
-export default function App() {
+function Document({
+  children,
+  title = "Remix: So great, it's funny!",
+}: PropsWithChildren<{ title?: string }>) {
   return (
     <html lang="en">
       <head>
@@ -23,11 +32,22 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        {children}
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
       </body>
     </html>
-  );
+  )
+}
+
+export default function App() {
+  return (
+    <Document>
+      <ComplexNavbar />
+      <div className="p-4 md:max-w-screen-xl  mx-auto">
+        <Outlet />
+      </div>
+    </Document>
+  )
 }
